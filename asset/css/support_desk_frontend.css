@@ -1,0 +1,448 @@
+.mt-0{margin-top: 0;}
+.mt-1{margin-top: 1rem;}
+.mt-2{margin-top: 2rem;}
+.mt-3{margin-top: 3rem;}
+.mt-4{margin-top: 4rem;}
+.mt-5{margin-top: 5rem;}
+
+.mb-0{margin-bottom: 0 !important;}
+.mb-1{margin-bottom: 1rem;}
+.mb-2{margin-bottom: 2rem;}
+.mb-3{margin-bottom: 3rem;}
+.mb-4{margin-bottom: 4rem;}
+.mb-5{margin-bottom: 5rem;}
+
+
+
+
+
+div#way > label {
+    display: inline-block;
+}
+.w-100{width: 100%;}
+
+.single-vicle div.image-vicle {
+    max-width: 30%;
+    width: 250px;
+    float: left;
+}
+
+.single-vicle > div{
+    display: inline-block;
+}
+
+div#vaclelist:not(.two_col) div.description-desc div.vacle-details > div {
+    width: 33.33%;
+    float: left;
+    max-width: 50%;
+}
+div#vaclelist.two_col div.description-desc div.vacle-details > div {
+    width: 50%;
+    float: left;
+    max-width: 50%;
+}
+div#vaclelist div.description-desc div.vacle-details > div:last-child{
+    /* width: 20%; */
+}
+div#vaclelist.two_col div.description-desc div.vacle-details .part-details.select-button {
+    margin-top: 10px;
+    max-width: 140px;
+}
+
+div.select-button a.btn-taxi-rent {
+    background: #bb1111;
+    color: white;
+    text-decoration: none;
+    padding: 7px 15px;
+    width: 100%;
+    border-radius: 5px;
+    margin: 0 auto;
+    text-align: center;
+    display: block;
+}
+.single-vicle {
+    overflow: hidden;
+    background-color: #eee;
+    padding: 15px;
+    margin-bottom: 30px;
+}
+
+div#vaclelist div.description-desc div.vacle-details div.taxi-shadow {
+    background-color: #ddd;
+    border-radius: 5px;
+    box-shadow: 2px 2px 0.2em #999;
+    margin: 0px 20px 0 0;
+    padding: 5px 0;
+}
+.part-details.select-button {
+    /* padding: 12px 0; */
+}
+.image-vicle {
+    box-shadow: 2px 3px 0.2em #666;
+}
+
+div#online-booking-form {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.44);
+    display: block;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    display: none;
+    z-index: 9;
+    max-width: unset;
+}
+.form-online-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 5px;
+    margin-left: -100%;
+    overflow: auto;
+    position: relative;
+}
+form#portForm select:disabled,
+form#portForm input[type="text"]:disabled{
+    display: none;
+}
+
+div#switchDirection img {
+    max-width: 40px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+div#switchDirection{
+    cursor: pointer;
+    display: table;
+}
+div#switchDirection span{
+    display: table-cell;
+    vertical-align: middle;
+}
+
+form#other_service .btn-sm:not(.toggle-off){
+    padding-top: 4px;
+    padding-left: 0;
+    padding-bottom: 0;
+    margin: 0 auto;
+}
+form#other_service .btn-sm.toggle-off{
+    padding-top: 4px;
+    padding-right: 0;
+    padding-bottom: 0px;
+}
+
+.imageDiv {
+    overflow: hidden;
+    height: 120px;
+    margin-bottom: 8px;
+    display: table;
+    position: relative;
+    max-height: 20px;
+    text-align: center;
+    justify-content: center;
+    margin: 0 auto 10px auto;
+}
+
+.imageDiv img {
+    vertical-align: middle;
+    position: relative;
+    max-width: 100%;
+    height: 80px;
+    margin: 0 auto;
+    display: table-cell;
+    overflow: hidden;
+    text-align: center;
+}
+
+.adddropoff > span.addDropOffButton {
+    background: red;
+    color: white;
+    padding: 5px 15px;
+    margin-right: 11px;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 0;
+    text-align: center;
+    display: inline-block;
+    float: none;
+}
+.position-relative{
+    position: relative;
+}
+.selectlocation > i {
+    position: absolute;
+    right: 7px;
+    bottom: 7px;
+    font-size: 22px;
+}
+form#comfirmByPayment label.error {
+    color: red;
+    font-weight: normal;
+    font-size: 14px;
+}
+form#comfirmByPayment input.error{
+    border-color: red;
+}
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, .col, .col-auto, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm, .col-sm-auto, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-md, .col-md-auto, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg, .col-lg-auto, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl, .col-xl-auto {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.text-center {
+    text-align: center !important;
+}
+@media (min-width: 768px){
+    .col-md-3 {
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+@media (min-width: 576px){
+    .col-sm-3 {
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+@media (min-width: 768px){
+    .col-md-6 {
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 576px){
+    .col-sm-6 {
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+.col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12, .col, .col-auto, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm, .col-sm-auto, .col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12, .col-md, .col-md-auto, .col-lg-1, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg, .col-lg-auto, .col-xl-1, .col-xl-2, .col-xl-3, .col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9, .col-xl-10, .col-xl-11, .col-xl-12, .col-xl, .col-xl-auto {
+    position: relative;
+    width: 100%;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.d-none{
+    display: none;
+}
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+.toggle.btn-sm {
+    min-width: 3.125rem;
+    min-height: 1.938rem;
+}
+.toggle {
+    position: relative;
+    overflow: hidden;
+}
+.btn-sm {
+    padding: 0.5rem 1.25rem;
+}
+.btn-primary, input[type="button"], input[type="reset"], input[type="submit"], .btn-outline-primary, .button.add_to_cart_button, .wc-proceed-to-checkout .checkout-button.button, .price_slider_amount button[type="submit"] {
+    border-color: #002e5b;
+}
+.single-via {
+    position: relative;
+}
+span.delete_via {
+    position: absolute;
+    top: -5px;
+    right: 0;
+    color: red;
+    display: none;
+    cursor: pointer;
+}
+
+.single-via:hover span.delete_via{
+    display: block;
+}
+form#other_service h6 {
+    height: 45px;
+}
+div#removeContinue {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+}
+div#removeContinue i {
+    width: 25px;
+    height: 25px;
+    background-color: red;
+    color: white;
+    border-radius: 69px;
+    text-align: center;
+    line-height: 3px;
+    padding: 12px 0;
+    font-size: 14px;
+}
+
+@media screen and (max-width:768px){
+    form#other_service > div > div {
+        margin-bottom: 30px;
+    }
+}
+
+@media screen and (min-width: 411px){
+    div#vaclelist.two_col div.description-desc div.vacle-details .part-details.select-button{
+        max-width: unset;
+    }
+
+    div#vaclelist div.description-desc {
+        width: calc(100% - 30%);
+        float: left;
+        padding-left: 30px;
+    }    
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 1px solid #b9843f;
+    background: #BC8C4D;
+    font-weight: normal;
+    color: #fff;
+}
+form#comfirmByPayment .form-control:not(.error) {
+    margin-bottom: 15px;
+}
+
+@media only screen and (max-width: 460px){
+    .single-vicle div.image-vicle {
+        max-width: 100%;
+        width: 311px;
+        float: left;
+        margin-bottom: 20px;
+    }
+    div#vaclelist div.description-desc {
+        width: 100%;
+        float: left;
+        padding-left: 10px;
+    }    
+    
+}
+
+
+div#vaclelist.two_col div.description-desc div.vacle-details > div.price > div{
+    margin: 0;
+}
+
+.additionalService h6 {
+    margin: 0.5rem auto 2.5rem !important;
+}
+
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.btn-group-sm>.btn, .btn-sm {
+    padding: .25rem .5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+
+
+div#history {
+    height: 400px;
+    overflow: auto;
+    background: #f9f9f9;
+}
+#history .mine {
+    text-align: right;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+#history .theirs {
+    margin-left: 20px;
+    margin-top: 20px;
+}
+p.msg-time {
+    margin-bottom: 0px;
+}
+p.owner-msg {
+    max-width: 350px;
+    margin: 10px 0px;
+    color: #fff !important;
+    text-decoration: none;
+    background: #7b7375;
+    padding: 5px 15px;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 12px;
+    display: inline-block;
+    border: none;
+    transition: all 0.4s ease 0s;
+    overflow: hidden;
+    text-align: justify;
+}
+.mine p.owner-msg {
+    background: #0084ff;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
+
+
+
+.wp-core-ui .button, .wp-core-ui .button-secondary {
+    color: #555 !important;
+}
+input.button.button-primary {
+    margin-top: 20px;
+}
