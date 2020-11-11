@@ -1,16 +1,15 @@
-
 <?php 
-
-// echo 'lastid : ' . get_option( 'lastid' );
-
     $process = false;
     if(isset($_REQUEST['replay'])){
-
-        $process = $this->processAdminReplay($_POST);
-
-        // echo '<pre>';
-        // print_r($_POST);
-        // echo '</pre>';
+        // Validateion
+        $msg = '';
+        if(isset($_POST['msg']) && empty($_POST['msg'])){
+            $msg .= __('Message are required.', 'support-desk');
+        }
+        if(empty($msg)){
+            $process = $this->processAdminReplay($_POST);
+        }
+        
     }
 
 
@@ -24,6 +23,10 @@
 
     $table_name = $this->replay_tbl;
     $replay_tbl = $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM {$table_name} WHERE `support_id`=%d", $_GET['id'] ), OBJECT ); 
+
+    // echo '<pre>';
+    // print_r($replay_tbl);
+    // echo '</pre>';
                              
 ?>
 
@@ -57,13 +60,14 @@
                 <span><small><i><?php echo sprintf('Date: %s', date('F Y d', strtotime($results->ticket_date))); ?></i></small></span>
             </p>
             <br><br>
-            <div id="history">
+            <div id="history" class="pt-3">
                 <?php
                 foreach ($replay_tbl as $single_reply){
                     $className = ( $single_reply->message_author == 'admin' ) ? 'mine' : 'theirs';
                     $time = strtotime( $single_reply->r_date );
                     ?>
                     <div class="<?php echo $className; ?>">
+                        <p class="author_name mb-0"><i><?php echo $single_reply->message_author == 'admin' ? __('Support Agent', 'support-desk') : $results->name; ?></i></p>
                         <p class="msg-time"><?php echo date("M d, Y H:i A", $time ); ?></p>
                         <p class="owner-msg"><?php echo $single_reply->message; ?></p>
                     </div>
@@ -97,6 +101,11 @@
                             
                             wp_editor( $content, $editor_id, $args );
                         ?>
+                            <?php if(isset($msg) && !empty($msg)): ?>
+                            <div class="mt-1 alert alert-danger" role="alert">
+                                <?php echo $msg; ?>
+                            </div>
+                            <?php endif; ?>
                     </div>
                     <div class="form-group mb-1 mt-1">
                         <label for="status"><?php _e('Status', 'support-desk'); ?></label>
@@ -142,7 +151,7 @@
 
             <!-- NOte Form -->
             <form action="" method="post">
-                <textarea class="w-100" name="note" id="note" cols="30" rows="5"></textarea>
+                <textarea class="w-100" required name="note" id="note" cols="30" rows="5"></textarea>
                 <input type="submit" class="button button-primary" name="note_submit" value="<?php _e('Submit', 'support-desk'); ?>">
             </form>
         </div>

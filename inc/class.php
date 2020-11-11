@@ -41,6 +41,59 @@ if (!class_exists('supportDeskClass')) {
             // route
             add_action( 'init', array($this, 'wpse26388_rewrites_init') );
             add_filter( 'query_vars', array($this, 'wpse26388_query_vars') );
+            add_action( 'rest_api_init', array($this, 'registerSupportDeskRestAPI'));
+            add_filter( 'wp_mail_content_type', array($this, 'wpse27856_set_content_type') );
+            
+        }
+
+        public function wpse27856_set_content_type(){
+            return "text/html";
+        }
+
+        public function testF(){
+            echo 'omar Faruque';
+            $ids = array(1,2,3);
+            $update = $this->wpdb->query( $this->wpdb->prepare( "UPDATE ".$this->option_tbl." SET `status`=%s WHERE `id` IN (%s)", 'close', $ids ) );
+
+            echo 'UPdate: ' . $update . '<br/>';
+            
+        }
+
+        public function registerSupportDeskRestAPI(){
+           /*
+            * Rest API
+            */
+            register_rest_route( 'supportdesk', '/status/(?P<action>[a-zA-Z0-9-]+)/(?P<ids>[a-zA-Z0-9-]+)', array(
+                // Supported methods for this endpoint. WP_REST_Server::READABLE translates to GET.
+                'methods' => 'GET',
+                // Register the callback for the endpoint.
+                'callback' => array($this, 'deleteSupportDesk'),
+            ) );   
+        }
+
+
+        public function deleteSupportDesk($data){
+            $ids = explode('-', $data['ids']);
+            $action = $data['action'];
+            $action = $action == 'delete' ? 'close' : 'open';
+            foreach($ids as $id){
+                $update = $this->wpdb->update(
+                    $this->option_tbl,
+                    array(
+                        'status' => $action
+                    ),
+                    array(
+                        'id' => $id
+                    ),
+                    array('%s'), 
+                    array('%d')
+                );    
+            }
+
+            return array(
+                'msg' => 'success'
+            );
+            
         }
 
         function wpse26388_rewrites_init(){
@@ -101,7 +154,12 @@ if (!class_exists('supportDeskClass')) {
             ob_start();
 
             if(isset($_REQUEST['replay'])){
-                $process = $this->processUserReplay($_POST);
+                $error = '';
+                if(isset($_POST['msg']) && empty($_POST['msg'])){
+                    $error .= __('Message are required', 'support-desk');
+                }else{
+                    $process = $this->processUserReplay($_POST);
+                }
             }
             $user_support_id = get_query_var( 'user_support_id', 1 );
 
@@ -112,10 +170,6 @@ if (!class_exists('supportDeskClass')) {
 
             $table_name = $this->replay_tbl;
             $replay_tbl = $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM {$table_name} WHERE `support_id`=%d", $nonce_author_id ), OBJECT ); 
-
-            // echo '<pre>';
-            // print_r($_POST);
-            // echo '</pre>';
             ?>
                 <div class="welcome-user-reply-content">
                     <h2>
@@ -138,8 +192,9 @@ if (!class_exists('supportDeskClass')) {
                             $time = strtotime( $single_reply->r_date );
                             ?>
                             <div class="<?php echo $className; ?>">
-                                <p class="msg-time"><?php echo date("M d, Y H:i A", $time ); ?></p>
-                                <p class="owner-msg"><?php echo $single_reply->message; ?></p>
+                                <p class="author_name mb-0 mt-0"><i><?php echo $single_reply->message_author != 'user' ? __('Support Agent', 'support-desk') : $nonce_author_id_array->name; ?></i></p>
+                                <p class="msg-time mt-0 mb-0"><?php echo date("M d, Y H:i A", $time ); ?></p>
+                                <p class="owner-msg mt-0"><?php echo $single_reply->message; ?></p>
                             </div>
                         <?php } ?>
                     </div>
@@ -167,6 +222,13 @@ if (!class_exists('supportDeskClass')) {
                                         );
                                         wp_editor( $content, $editor_id, $args );
                                     ?>
+
+                                    <?php if(isset($error) && !empty($error)): ?>
+                                        <div id="errorMsg">
+                                            <div class="errorinner text-danger"><?php echo $error; ?></div>
+                                        </div>
+                                    <?php endif; ?>
+                                    
                                 </div>
                                 <input type="submit" name="replay" class="button button-primary" value="<?php _e('Submit', 'support-desk'); ?>">
                             </form>
@@ -204,6 +266,10 @@ if (!class_exists('supportDeskClass')) {
             
             wp_enqueue_script( 'dataTableJS', 'https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.js', array(), time(), true);
             wp_enqueue_style( 'dataTableCSS', 'https://cdn.datatables.net/v/dt/dt-1.10.20/datatables.min.css', array(), true, 'all' );
+
+            wp_localize_script( 'supportAdminStyleJS', 'object', array(
+                'base_url' => get_rest_url( null, '' )
+            ) );
         }
         
         public function supportFrontendEnqueScripts(){
@@ -310,8 +376,6 @@ if (!class_exists('supportDeskClass')) {
         * Mark support as spam
         */
         public function markAsSpam($id, $spam){
-
-            if( !is_numeric($spam) ){
                 $update = $this->wpdb->update(
                     $this->option_tbl,
                     array(
@@ -335,7 +399,6 @@ if (!class_exists('supportDeskClass')) {
                     
                 }
 
-            }
         }
 
 
