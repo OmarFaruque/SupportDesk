@@ -81,7 +81,8 @@
         <?php   
 	    foreach($results as $row){     
 	    	$id =  $row->id;    
-	    	$name =  $row->name;    
+            $name =  $row->name; 
+            if(empty($name)) $name = $row->first_name . ' ' . $row->last_name;   
 	    	$subject =  $row->subject; 
 	    	$email =  $row->email;  
 			//echo "<th>Email</th>" . "<td>" . $row->email . "</td>";
@@ -95,7 +96,7 @@
             <td style="width:15%;" class="title column-title column-primary">
                 <strong>
                     <a class="row-title"
-                        href="<?php echo admin_url('admin.php?page=support_desk&id='.$id) ?>"><?php echo $subject; ?></a></strong>
+                        href="<?php echo admin_url('admin.php?page=support_desk&id='.$id) ?>"><?php echo $name; ?></a></strong>
                 <div class="row-actions">
 					<?php if(!isset($_GET['spam'])): ?>
                     <span class="edit"><a href="<?php echo admin_url('admin.php?page=support_desk&id='.$id) ?>"><?php _e('Details', 'support-desk'); ?></a> | </span>
@@ -116,7 +117,7 @@
 
             </td>
             <td class="email_show" data-colname="Shortcode"><span class="shortcode"><?php echo $email; ?></span></td>
-            <td class="author column-author" data-colname="Author"><?php echo $name; ?></td>
+            <td class="author column-author" data-colname="Author"><?php echo $subject; ?></td>
             <?php $status = ( $all_data->status == '' ) ? 'Not Yeat' : $all_data->status; ?>
             <td class="date column-date css<?php echo $status; ?>" data-colname="Date"><?php echo ucfirst($status); ?>
             </td>
