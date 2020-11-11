@@ -274,6 +274,8 @@ if (!class_exists('supportDeskClass')) {
         
         public function supportFrontendEnqueScripts(){
             wp_enqueue_style( 'supportfrontendStyleCSS', $this->plugin_url . 'asset/css/support_desk_frontend.css', array(), true, 'all' );
+            wp_enqueue_script('supportFrontEndJS', $this->plugin_url . 'asset/js/support_desk_frontend.js', array('jquery'), time(), true);
+            
         }
 
 
@@ -311,7 +313,7 @@ if (!class_exists('supportDeskClass')) {
                 'support_desk',
                 array($this, 'sub_option'),
                 'dashicons-buddicons-buddypress-logo',
-                null
+                15
             );
 
             add_submenu_page(

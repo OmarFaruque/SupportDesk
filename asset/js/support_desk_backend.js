@@ -18,5 +18,24 @@ jQuery(document).ready(function($){
             })
         }
 
+    }); // End on click input.support_bulk
+
+
+
+    jQuery(document).on('change', 'select#status', function(){
+        var thisvalue = jQuery(this).val();
+        if(thisvalue != 'close'){
+            document.getElementById('replaySubmitButton').removeAttribute('disabled');
+        }else{
+            document.getElementById('replaySubmitButton').setAttribute('disabled', 'disabled');
+        }
+    }); // Emd on Change event 
+
+
+
+    jQuery(document).on('click', 'div#history a', function(e){
+        e.preventDefault();
+        window.open( jQuery(this).attr('href'), "_blank"); 
     });
+
 });

@@ -52,11 +52,17 @@
                     echo sprintf('Details about "%s"', $results->subject );
                 ?>
             </h2>
-            <p class="about-description">
-                <span><small><i><?php echo sprintf('E-mail: %s,', $results->email); ?></i></small></span>
-                &nbsp;
+            <p class="about-description text-right">
+                <?php if(isset($results->email) && !empty($results->email)): ?>
+                    <span><small><i><?php echo sprintf('E-mail: %s,', $results->email); ?></i></small></span>
+                    &nbsp;
+                <?php endif; ?>
+                
+                <?php if(isset($results->name) && !empty($results->name)): ?>
                 <span><small><i><?php echo sprintf('Name: %s,', $results->name); ?></i></small></span>
                 &nbsp;
+                <?php endif; ?>
+
                 <span><small><i><?php echo sprintf('Date: %s', date('F Y d', strtotime($results->ticket_date))); ?></i></small></span>
             </p>
             <br><br>
@@ -124,7 +130,7 @@
                                     }
                                 ?>
                     </div>
-                    <input type="submit" name="replay" class="button button-primary" value="<?php _e('Submit', 'support-desk'); ?>">
+                    <input type="submit" id="replaySubmitButton" name="replay" <?php echo ($results->status == 'close') ? 'disabled="disabled"' : ''; ?> class="button button-primary" value="<?php _e('Submit', 'support-desk'); ?>">
                </form>
                </div>
             </div>
