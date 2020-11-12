@@ -286,3 +286,10 @@ tr.support-users-wrapper th {
 table.table-support-users-details th {
     padding-bottom: 20px;
 }
+table.table-support-users-details tr th:nth-child(2),
+table.table-support-users-details tr td:nth-child(2) {
+    text-align: left;
+}
+table.table-support-users-details tr td:first-child {
+    background-image: none;
+}

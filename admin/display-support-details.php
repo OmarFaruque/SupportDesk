@@ -63,6 +63,13 @@
                 &nbsp;
                 <?php endif; ?>
 
+
+                <!-- Phone Number -->
+                <?php if(isset($results->phone_number) && !empty($results->phone_number)): ?>
+                <span><small><i><?php echo sprintf('Phone: %s,', $results->phone_number); ?></i></small></span>
+                &nbsp;
+                <?php endif; ?>
+
                 <span><small><i><?php echo sprintf('Date: %s', date('F Y d', strtotime($results->ticket_date))); ?></i></small></span>
             </p>
             <br><br>

@@ -450,3 +450,6 @@ input.button.button-primary {
 .text-danger {
     color: goldenrod;
 }
+.text-error {
+    color: red !important;
+}

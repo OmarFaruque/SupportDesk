@@ -22,6 +22,25 @@ jQuery(document).ready(function($){
 
 
 
+    // Delete user list using bulk action
+    jQuery(document).on('click', 'input#doaction_forUserList', function(e){
+        let ids = [];
+        let action = jQuery('select#bulk-action-selector-top').val();
+        
+        jQuery('input[type="checkbox"][name="bulk_action[]"]:checked').each(function(k, v){
+            ids.push(jQuery(v).val());
+        });
+        
+        if(action == 'delete'){
+            // Delete Support
+            jQuery.get(object.base_url + 'supportdesk/user/' + action + '/' + ids.join('-'), function(data){
+                location.reload();
+            })
+        }
+    });
+
+
+
     jQuery(document).on('change', 'select#status', function(){
         var thisvalue = jQuery(this).val();
         if(thisvalue != 'close'){

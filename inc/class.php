@@ -68,9 +68,37 @@ if (!class_exists('supportDeskClass')) {
                 'methods' => 'GET',
                 // Register the callback for the endpoint.
                 'callback' => array($this, 'deleteSupportDesk'),
-            ) );   
+            ) );
+            
+            
+            // Delete User 
+            register_rest_route( 'supportdesk', '/user/(?P<action>[a-zA-Z0-9-]+)/(?P<ids>[a-zA-Z0-9-]+)', array(
+                // Supported methods for this endpoint. WP_REST_Server::READABLE translates to GET.
+                'methods' => 'GET',
+                // Register the callback for the endpoint.
+                'callback' => array($this, 'deleteSupportDeskUsers'),
+            ) );
         }
 
+
+
+        public function deleteSupportDeskUsers($data){
+            $ids = explode('-', $data['ids']);
+            foreach($ids as $id){
+                $email = $this->wpdb->get_row( $this->wpdb->prepare( "SELECT `email` FROM {$this->option_tbl} WHERE `id`=%s", $id ), OBJECT );
+                $this->wpdb->delete(
+                    $this->option_tbl,
+                    array(
+                        'email' => $email->email
+                    ),
+                    array('%s')
+                );
+            }
+
+            return array(
+                'msg' => 'success'
+            );
+        }
 
         public function deleteSupportDesk($data){
             $ids = explode('-', $data['ids']);
@@ -167,47 +195,63 @@ if (!class_exists('supportDeskClass')) {
             $nonce_author_id_array = $this->wpdb->get_row( $this->wpdb->prepare( "SELECT * FROM {$table_name} WHERE `nonce`=%s", $user_support_id ), OBJECT );
             
             $nonce_author_id = $nonce_author_id_array->id;
+            // echo '<pre>';
+            // print_r($nonce_author_id_array);
+            // echo '</pre>';
+
+            if(!$nonce_author_id_array){
+                echo sprintf('<p class="text-error text-danger text-center">%s</p>', __('Support Ticket aren\'t valid.', 'support-desk'));
+                return false;
+            }
 
             $table_name = $this->replay_tbl;
             $replay_tbl = $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM {$table_name} WHERE `support_id`=%d", $nonce_author_id ), OBJECT ); 
+            if(empty($nonce_author_id_array->name)) $nonce_author_id_array->name = $nonce_author_id_array->first_name . ' ' . $nonce_author_id_array->last_name;
             ?>
-                <div class="welcome-user-reply-content">
-                    <h2>
-                        <?php 
-                            echo sprintf('Details about %s', $nonce_author_id_array->subject );
+<div class="welcome-user-reply-content">
+    <h2>
+        <?php 
+                            echo sprintf('Details about "%s"', $nonce_author_id_array->subject );
                         ?>
-                    </h2>
-                    <p class="about-description">
-                        <span><small><i><?php echo sprintf('E-mail: %s,', $nonce_author_id_array->email); ?></i></small></span>
-                        &nbsp;
-                        <span><small><i><?php echo sprintf('Name: %s,', $nonce_author_id_array->name); ?></i></small></span>
-                        &nbsp;
-                        <span><small><i><?php echo sprintf('Date: %s', date('M d, Y H:i A', strtotime($nonce_author_id_array->ticket_date))); ?></i></small></span>
-                    </p>
-                    <br><br>
-                    <div id="history">
-                        <?php
+    </h2>
+    <p class="about-description">
+        <span><small><i><?php echo sprintf('E-mail: %s,', $nonce_author_id_array->email); ?></i></small></span>
+        &nbsp;
+        <span><small><i><?php echo sprintf('Name: %s,', $nonce_author_id_array->name); ?></i></small></span>
+        &nbsp;
+        <span><small><i><?php echo sprintf('Date: %s', date('M d, Y H:i A', strtotime($nonce_author_id_array->ticket_date))); ?></i></small></span>
+        &nbsp;
+        <span><small><i><?php echo sprintf('Status: %s', $nonce_author_id_array->status ); ?></i></small></span>
+    </p>
+    <br><br>
+    <div id="history">
+        <?php
                         foreach ($replay_tbl as $single_reply){
                             $className = ( $single_reply->message_author == 'user' ) ? 'mine' : 'theirs';
                             $time = strtotime( $single_reply->r_date );
                             ?>
-                            <div class="<?php echo $className; ?>">
-                                <p class="author_name mb-0 mt-0"><i><?php echo $single_reply->message_author != 'user' ? __('Support Agent', 'support-desk') : $nonce_author_id_array->name; ?></i></p>
-                                <p class="msg-time mt-0 mb-0"><?php echo date("M d, Y H:i A", $time ); ?></p>
-                                <p class="owner-msg mt-0"><?php echo $single_reply->message; ?></p>
-                            </div>
-                        <?php } ?>
-                    </div>
-                    <div class="welcome-panel-column-container mt-2 mb-2">
-                        <div id="post-body-content">
-                            <form id="replayForm" method="POST" action="">
-                                <input type="hidden" name="nonce_author_id" value="<?php echo $nonce_author_id; ?>">
-                                <input type="hidden" name="nonce_author_name" value="<?php echo $nonce_author_id_array->name; ?>">
-                                <input type="hidden" name="email" value="<?php echo $nonce_author_id_array->email; ?>">
-                                <input type="hidden" name="subject" value="<?php echo $nonce_author_id_array->subject; ?>">
-                                <div class="form-group">
-                                    <label for="msg"><?php _e('Replay', 'support-desk'); ?></label>
-                                    <?php      
+        <div class="<?php echo $className; ?>">
+            <p class="author_name mb-0 mt-0">
+                <i><?php echo $single_reply->message_author != 'user' ? __('Support Agent', 'support-desk') : $nonce_author_id_array->name; ?></i>
+            </p>
+            <p class="msg-time mt-0 mb-0"><?php echo date("M d, Y H:i A", $time ); ?></p>
+            <p class="owner-msg mt-0"><?php echo $single_reply->message; ?></p>
+        </div>
+        <?php } ?>
+    </div>
+    <div class="welcome-panel-column-container mt-2 mb-2">
+        <div id="post-body-content">
+            <form id="replayForm" method="POST" action="">
+                <input type="hidden" name="nonce_author_id" value="<?php echo $nonce_author_id; ?>">
+                <input type="hidden" name="nonce_author_name" value="<?php echo $nonce_author_id_array->name; ?>">
+                <input type="hidden" name="email" value="<?php echo $nonce_author_id_array->email; ?>">
+                <input type="hidden" name="subject" value="<?php echo $nonce_author_id_array->subject; ?>">
+
+
+                <?php if($nonce_author_id_array->status != 'close'): ?>
+                <div class="form-group">
+                    <label for="msg"><?php _e('Replay', 'support-desk'); ?></label>
+                    <?php      
                                         $editor_id = 'msg';
                                         $content = '';
                                         $args = array(
@@ -223,20 +267,22 @@ if (!class_exists('supportDeskClass')) {
                                         wp_editor( $content, $editor_id, $args );
                                     ?>
 
-                                    <?php if(isset($error) && !empty($error)): ?>
-                                        <div id="errorMsg">
-                                            <div class="errorinner text-danger"><?php echo $error; ?></div>
-                                        </div>
-                                    <?php endif; ?>
-                                    
-                                </div>
-                                <input type="submit" name="replay" class="button button-primary" value="<?php _e('Submit', 'support-desk'); ?>">
-                            </form>
-                        </div>
+                    <?php if(isset($error) && !empty($error)): ?>
+                    <div id="errorMsg">
+                        <div class="errorinner text-danger"><?php echo $error; ?></div>
                     </div>
-                </div>
+                    <?php endif; ?>
 
-            <?php
+                </div>
+                <input type="submit" name="replay" class="button button-primary"
+                    value="<?php _e('Submit', 'support-desk'); ?>">
+                <?php endif; ?>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php
             $output = ob_get_clean();
             return $output;
         }
@@ -318,8 +364,8 @@ if (!class_exists('supportDeskClass')) {
 
             add_submenu_page(
                 'support_desk',
-                __('Support Users List', 'support-desk'),
-                __('Support Users List', 'support-desk'),
+                __('Address Book', 'support-desk'),
+                __('Address Book', 'support-desk'),
                 'manage_options',
                 'support_users_details',
                 array($this, 'support_users_detailsCallback')
@@ -340,8 +386,70 @@ if (!class_exists('supportDeskClass')) {
             include_once(supportDeskDIR . 'admin/display-support-setings.php');
         }
 
+
+
+        private function deleteFromAddressBook($id){
+            /*
+            * Delete 
+            */
+            $delete = $this->wpdb->query( $this->wpdb->prepare( "DELETE FROM {$this->option_tbl} WHERE `email`= (SELECT `email` FROM {$this->option_tbl} WHERE `id`=%d)", $id));
+            if($delete){
+                wp_safe_redirect( admin_url( 'admin.php?page=support_users_details' ) );
+                exit;
+            }
+        }
+        
+
+
+
+        private function singleUserDetails(){
+            if(!isset($_GET['eid']))
+                return false;
+            
+            $details = $this->wpdb->get_row( $this->wpdb->prepare( "SELECT * FROM {$this->option_tbl} WHERE `id`=%d", $_GET['eid'] ), OBJECT );
+            return $details;
+        }
+
+
+
+        private function updateUserDetails($id){
+            $name           = sanitize_text_field($_POST['name']);
+            $first_name     = sanitize_text_field($_POST['first_name']);
+            $last_name      = sanitize_text_field($_POST['last_name']);
+            $email          = sanitize_email($_POST['email']);
+            $phone          = sanitize_text_field( $_POST['phone'] );
+            $ext_email      = sanitize_email( $_POST['exist_mail'] );
+
+            /*
+            * Update User Details
+            */
+            $this->wpdb->update(
+                $this->option_tbl, 
+                array(
+                    'name' => $name, 
+                    'first_name' => $first_name,
+                    'last_name' => $last_name, 
+                    'email' => $email, 
+                    'phone_number' => $phone
+                ), 
+                array('email' => $ext_email), 
+                array('%s', '%s', '%s', '%s', '%s'), 
+                array('%s')
+            );
+        }
+
         public function support_users_detailsCallback(){
-            include_once(supportDeskDIR . 'admin/support-users-details.php');
+            if(isset($_GET['did']) && !empty($_GET['did'])){
+                $this->deleteFromAddressBook($_GET['did']);
+            }
+            if(isset($_GET['eid']) && !empty($_GET['eid'])){
+                if(isset($_POST['user_details_update'])){
+                    $this->updateUserDetails($_GET['eid']);
+                }
+                include_once(supportDeskDIR . 'admin/support-users-details-edit.php');    
+            }else{
+                include_once(supportDeskDIR . 'admin/support-users-details.php');
+            }
         }
 
 
@@ -555,7 +663,7 @@ if (!class_exists('supportDeskClass')) {
                 email varchar(150) NOT NULL,
                 first_name varchar(100) NOT NULL,
                 last_name varchar(100) NOT NULL,
-                phone_number int(50) NOT NULL,
+                phone_number varchar(150) NOT NULL,
                 user_date varchar(100) NOT NULL,
                 user_time varchar(100) NOT NULL,
                 user_number int(50) NOT NULL,
@@ -610,21 +718,21 @@ if (!class_exists('supportDeskClass')) {
                 $posted_data = $submission->get_posted_data();
             }       
            if ( 'sDeskForm' == $title ) {
-                $name = strtolower($posted_data['your-name']);
+                $name = sanitize_text_field( $posted_data['your-name'] );
                 //$name = strtolower(str_replace(' ', '_',  $name));
-                $email = strtolower($posted_data['your-email']);
-                $subject = strtolower($posted_data['your-subject']);
-                $message = strtolower($posted_data['your-message']);
+                $email = sanitize_email($posted_data['your-email']);
+                $subject = sanitize_text_field($posted_data['your-subject']);
+                $message = sanitize_text_field($posted_data['your-message']);
 
                 $nonce = wp_create_nonce( $email . $subject . time() );
                 //$phone = strtolower($posted_data['phone']);
                 
-                $first_name = ( strtolower($posted_data['your-first-name']) == '' ) ? $name : strtolower($posted_data['your-first-name']);
-                $last_name = ( strtolower($posted_data['your-last-name']) == '' ) ? $name : strtolower($posted_data['your-last-name']);
-                $phone_number = ( strtolower($posted_data['your-phone-number']) == '' ) ? '123456789' : strtolower($posted_data['your-phone-number']);
-                $user_date = ( strtolower($posted_data['your-date']) == '' ) ? date("Y-m-d") : strtolower($posted_data['your-date']);
-                $user_time = ( strtolower($posted_data['your-time']) == '' ) ? date("h:i:sa") : strtolower($posted_data['your-time']);
-                $user_number = ( strtolower($posted_data['your-number']) == '' ) ? '1' : strtolower($posted_data['your-number']);
+                $first_name = ( sanitize_text_field($posted_data['your-first-name']) == '' ) ? $name : sanitize_text_field($posted_data['your-first-name']);
+                $last_name = ( sanitize_text_field($posted_data['your-last-name']) == '' ) ? $name : sanitize_text_field($posted_data['your-last-name']);
+                $phone_number = ( sanitize_text_field($posted_data['your-phone-number']) == '' ) ? '123456789' : sanitize_text_field($posted_data['your-phone-number']);
+                $user_date = ( sanitize_text_field($posted_data['your-date']) == '' ) ? date("Y-m-d") : sanitize_text_field($posted_data['your-date']);
+                $user_time = ( sanitize_text_field($posted_data['your-time']) == '' ) ? date("h:i:sa") : sanitize_text_field($posted_data['your-time']);
+                $user_number = ( sanitize_text_field($posted_data['your-number']) == '' ) ? '1' : sanitize_text_field($posted_data['your-number']);
 
                 global $wpdb; 
                 $insert = $wpdb->insert($this->option_tbl, 
@@ -651,11 +759,10 @@ if (!class_exists('supportDeskClass')) {
                         '%s',
                         '%s',
                         '%s',
-                        '%d',
                         '%s',
                         '%s',
-                        '%d',
-
+                        '%s',
+                        '%d'
                     ) 
                 );
 
@@ -691,7 +798,3 @@ if (!class_exists('supportDeskClass')) {
 
     } // End Class
 } // End Class check if exist / not
-
-
-
-

@@ -39,7 +39,7 @@ if(isset($_REQUEST['replay'])){
                             </li>
                             <?php
 
-                            $all_fields = array( 'no', 'id', 'name', 'email', 'first_name', 'last_name', 'phone_number', 'user_date', 'user_time', 'user_number', 'subject', 'message', 'status', 'nonce', 'ticket_date' );
+                            $all_fields = array( 'name', 'email', 'first_name', 'last_name', 'phone_number', 'ticket_date' );
                             $add_these_fields = array();
                             if ( get_option( 'add_these_fields' ) !== false ) {
                                 $add_these_fields = get_option( 'add_these_fields');

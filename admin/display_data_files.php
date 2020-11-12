@@ -2,7 +2,7 @@
 
 	$table_name = $this->option_tbl;
 	$foler = (isset($_GET['spam']) && $_GET['spam'] == 'all') ? 0 : 1;
-	$results = $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM {$table_name} WHERE `folder`=%d", $foler ), OBJECT ); 
+    $results = $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM {$table_name} WHERE `folder`=%d", $foler ), OBJECT ); 
 
 	$inbox = $this->wpdb->get_row( $this->wpdb->prepare( "SELECT count(*) as total FROM {$table_name} WHERE `folder`=%d", 1 ), OBJECT ); 
 	$spam = $this->wpdb->get_row( $this->wpdb->prepare( "SELECT count(*) as total FROM {$table_name} WHERE `folder`=%d", 0 ), OBJECT ); 
