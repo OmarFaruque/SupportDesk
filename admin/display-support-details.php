@@ -81,8 +81,7 @@
                 <div id="post-body-content">
                <form id="replayForm" method="POST" action="">
                     <?php wp_nonce_field( 'support_form', 'support_form_nonce' ); ?>
-                    <input type="hidden" name="c_nonce" value="<?php echo $results->nonce; ?>"> 
-                    <?php echo 'nonce: ' . $results->nonce . '<br/>'; ?>
+                    <input type="hidden" name="nonce" value="<?php echo $results->nonce; ?>"> 
                     <input type="hidden" name="email" value="<?php echo $results->email; ?>">
                     <input type="hidden" name="name" value="<?php echo $results->name; ?>">
                     <input type="hidden" name="number" value="<?php echo $results->phone_number; ?>">
