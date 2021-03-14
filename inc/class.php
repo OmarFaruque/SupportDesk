@@ -319,8 +319,10 @@ if (!class_exists('supportDeskClass')) {
         }
         
         public function supportFrontendEnqueScripts(){
-            wp_enqueue_style( 'supportfrontendStyleCSS', $this->plugin_url . 'asset/css/support_desk_frontend.css', array(), true, 'all' );
-            wp_enqueue_script('supportFrontEndJS', $this->plugin_url . 'asset/js/support_desk_frontend.js', array('jquery'), time(), true);
+            if(get_option('support_desk_user_reply_page') == get_queried_object_id()):
+                wp_enqueue_style( 'supportfrontendStyleCSS', $this->plugin_url . 'asset/css/support_desk_frontend.css', array(), true, 'all' );
+                wp_enqueue_script('supportFrontEndJS', $this->plugin_url . 'asset/js/support_desk_frontend.js', array('jquery'), time(), true);
+            endif;
         }
 
 
