@@ -2,7 +2,7 @@
 
 	$table_name = $this->option_tbl;
 	$foler = (isset($_GET['spam']) && $_GET['spam'] == 'all') ? 0 : 1;
-    $results = $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM {$table_name} WHERE `folder`=%d", $foler ), OBJECT ); 
+    $results = $this->wpdb->get_results( $this->wpdb->prepare( "SELECT * FROM {$table_name} WHERE `folder`=%d ORDER BY `id` DESC", $foler ), OBJECT ); 
 
 	$inbox = $this->wpdb->get_row( $this->wpdb->prepare( "SELECT count(*) as total FROM {$table_name} WHERE `folder`=%d", 1 ), OBJECT ); 
 	$spam = $this->wpdb->get_row( $this->wpdb->prepare( "SELECT count(*) as total FROM {$table_name} WHERE `folder`=%d", 0 ), OBJECT ); 
@@ -112,6 +112,11 @@
                     <span class="close-support  css<?php echo $action_close; ?>"><a
                             href="<?php echo admin_url('admin.php?page=support_desk&action='.$action_close.'&sid='.$id) ?>"
                             aria-label="Move to spam folder"><?php echo ucfirst($action_close); ?></a> </span>
+                        |
+                    <span class="close-support cssDelete"><a
+                            href="<?php echo admin_url('admin.php?page=support_desk&action=delete&sid='.$id) ?>"
+                            aria-label="Move to spam folder"><?php _e('Delete', 'support-desk'); ?></a> </span>
+
 
                 </div>
 

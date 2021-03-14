@@ -47,30 +47,21 @@
 <div id="wrap">
     <div id="welcome-panel" class="welcome-panel max-width-75 flot-left">
         <div class="welcome-panel-content">
+
+    <?php  $header_array = array('id', 'status', 'nonce', 'folder', 'ticket_date'); ?>
+
             <h2>
                 <?php 
                     echo sprintf('Details about "%s"', $results->subject );
                 ?>
             </h2>
             <p class="about-description text-right">
-                <?php if(isset($results->email) && !empty($results->email)): ?>
-                    <span><small><i><?php echo sprintf('E-mail: %s,', $results->email); ?></i></small></span>
-                    &nbsp;
-                <?php endif; ?>
-                
-                <?php if(isset($results->name) && !empty($results->name)): ?>
-                <span><small><i><?php echo sprintf('Name: %s,', $results->name); ?></i></small></span>
-                &nbsp;
-                <?php endif; ?>
-
-
-                <!-- Phone Number -->
-                <?php if(isset($results->phone_number) && !empty($results->phone_number)): ?>
-                <span><small><i><?php echo sprintf('Phone: %s,', $results->phone_number); ?></i></small></span>
-                &nbsp;
-                <?php endif; ?>
-
-                <span><small><i><?php echo sprintf('Date: %s', date('F Y d', strtotime($results->ticket_date))); ?></i></small></span>
+                <?php $i = 1; foreach($results as $k => $singleH): ?>
+                    <?php if(isset($singleH) && !empty($singleH) && !in_array($k, $header_array) ): ?>
+                        <span><small><i> <?php echo str_replace('_', ' ', ucwords($k)) . ' : ' . $singleH; ?> <?php echo ($i != (count((array)$results)) - (count($header_array) - 1) ) ? ', ': ''; ?> </i></small></span>
+                        &nbsp;
+                    <?php endif; ?>    
+                <?php $i++; endforeach; ?>
             </p>
             <br><br>
             <div id="history" class="pt-3">
@@ -90,7 +81,8 @@
                 <div id="post-body-content">
                <form id="replayForm" method="POST" action="">
                     <?php wp_nonce_field( 'support_form', 'support_form_nonce' ); ?>
-                    <input type="hidden" name="nonce" value="<?php echo $results->nonce; ?>">
+                    <input type="hidden" name="c_nonce" value="<?php echo $results->nonce; ?>"> 
+                    <?php echo 'nonce: ' . $results->nonce . '<br/>'; ?>
                     <input type="hidden" name="email" value="<?php echo $results->email; ?>">
                     <input type="hidden" name="name" value="<?php echo $results->name; ?>">
                     <input type="hidden" name="number" value="<?php echo $results->phone_number; ?>">

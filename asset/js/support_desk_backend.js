@@ -41,6 +41,7 @@ jQuery(document).ready(function($){
 
 
 
+
     jQuery(document).on('change', 'select#status', function(){
         var thisvalue = jQuery(this).val();
         if(thisvalue != 'close'){

@@ -105,15 +105,11 @@ if (!class_exists('supportDeskClass')) {
             $action = $data['action'];
             $action = $action == 'delete' ? 'close' : 'open';
             foreach($ids as $id){
-                $update = $this->wpdb->update(
+                $delete = $this->wpdb->delete(
                     $this->option_tbl,
-                    array(
-                        'status' => $action
-                    ),
                     array(
                         'id' => $id
                     ),
-                    array('%s'), 
                     array('%d')
                 );    
             }
@@ -304,7 +300,11 @@ if (!class_exists('supportDeskClass')) {
 
 
 
-        public function supportAdminEnqueScripts(){
+        public function supportAdminEnqueScripts($hook){
+            
+            $pages = array('toplevel_page_support_desk', 'support-desk_page_support_users_details', 'support-desk_page_settings');
+            if(!in_array($hook, $pages)) return false;
+            
             wp_register_style( 'supportAdminStyle', $this->plugin_url . 'asset/css/support_desk_backend.css', array(), time(), 'all' );
             wp_enqueue_style( 'supportAdminStyle' );
             wp_enqueue_style( 'fontawesomeCSS', 'https://use.fontawesome.com/releases/v5.4.1/css/all.css', array(), true, 'all' );
@@ -321,7 +321,6 @@ if (!class_exists('supportDeskClass')) {
         public function supportFrontendEnqueScripts(){
             wp_enqueue_style( 'supportfrontendStyleCSS', $this->plugin_url . 'asset/css/support_desk_frontend.css', array(), true, 'all' );
             wp_enqueue_script('supportFrontEndJS', $this->plugin_url . 'asset/js/support_desk_frontend.js', array('jquery'), time(), true);
-            
         }
 
 
@@ -483,6 +482,25 @@ if (!class_exists('supportDeskClass')) {
 
 
         /*
+        * Delete permanently
+        */
+        public function marktoDelete($id){
+            $delete = $this->wpdb->delete(
+                $this->option_tbl,
+                array(
+                    'id' => $id
+                ),
+                array('%d')
+            );
+
+            if($delete){
+                    wp_safe_redirect( admin_url( 'admin.php?page=support_desk' ) );
+                    exit;
+            }
+        }
+
+
+        /*
         * Mark support as spam
         */
         public function markAsSpam($id, $spam){
@@ -548,6 +566,9 @@ if (!class_exists('supportDeskClass')) {
             }
             elseif(isset($_GET['sid']) && isset($_GET['action']) && $_GET['action'] == 'open') {
                 $this->marktoClose($_GET['sid'], 'open');
+            }
+            elseif(isset($_GET['sid']) && isset($_GET['action']) && $_GET['action'] == 'delete') {
+                $this->marktoDelete($_GET['sid']);
             }
 
             else{
@@ -729,7 +750,7 @@ if (!class_exists('supportDeskClass')) {
                 
                 $first_name = ( sanitize_text_field($posted_data['your-first-name']) == '' ) ? $name : sanitize_text_field($posted_data['your-first-name']);
                 $last_name = ( sanitize_text_field($posted_data['your-last-name']) == '' ) ? $name : sanitize_text_field($posted_data['your-last-name']);
-                $phone_number = ( sanitize_text_field($posted_data['your-phone-number']) == '' ) ? '123456789' : sanitize_text_field($posted_data['your-phone-number']);
+                $phone_number = ( sanitize_text_field($posted_data['your-phone-number']) == '' ) ? '' : sanitize_text_field($posted_data['your-phone-number']);
                 $user_date = ( sanitize_text_field($posted_data['your-date']) == '' ) ? date("Y-m-d") : sanitize_text_field($posted_data['your-date']);
                 $user_time = ( sanitize_text_field($posted_data['your-time']) == '' ) ? date("h:i:sa") : sanitize_text_field($posted_data['your-time']);
                 $user_number = ( sanitize_text_field($posted_data['your-number']) == '' ) ? '1' : sanitize_text_field($posted_data['your-number']);
